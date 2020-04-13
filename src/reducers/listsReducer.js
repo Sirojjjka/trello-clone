@@ -1,37 +1,39 @@
 import {CONSTANTS} from "../actions";
 
+
+
 let listID = 2;
-let cardID = 3;
+let cardID = 4;
 
 const initialState=[
     {
         title: "Last Episode",
-        id:0,
+        id:`list-${0}`,
         cards:[
             {
-                id:0,
+                id:`card-${0}`,
                 text:"Create a static "
             },
             {
-                id:1,
+                id:`card-${1}`,
                 text:"Chego-to eshe"
             },
         ]
     },
     {
         title: "This Episode",
-        id:1,
+        id:`list-${1}`,
         cards:[
             {
-                id:0,
+                id:`card-${2}`,
                 text:"Come to grandma "
             },
             {
-                id:1,
+                id:`card-${3}`,
                 text:"give feed to my dog"
             },
             {
-                id:2,
+                id:`card-${4}`,
                 text:"this guy has no chill"
             },
         ]
@@ -46,14 +48,14 @@ const listsReducer=(state=initialState, action)=>{
             const newList= {
                 title: action.payload,
                 cards:[],
-                id: listID}
+                id: `list-${listID}`}
                 listID +=1;
             return [...state, newList];
 
-        case CONSTANTS.ADD_CARD:
+        case CONSTANTS.ADD_CARD: {
             const newCard={
                 text:action.payload.text,
-                id:cardID
+                id:`card-${cardID}`
             };
             cardID +=1;
 
@@ -62,13 +64,28 @@ const listsReducer=(state=initialState, action)=>{
                     return{
                         ...list,
                         cards:[...list.cards, newCard]
-                    }
+                    };
                 } else {
-                    return list
+                    return list;
                 }
             });
 
-            return newState;
+            return newState;}
+
+        case CONSTANTS.DRAG_HAPPENED:
+
+            const{droppableIdStart,
+                droppableIdEnd,
+                droppableIndexStart,
+                droppableIndexEnd,
+                draggableId} = action.payload;
+            const newState=[...state];
+            if(droppableIdStart === droppableIdEnd){
+const list = state.find(list => droppableIdStart === list.id)
+                const card = list.cards.splice(droppableIndexStart, 1)
+                list.cards.splice(droppableIdEnd, 0, ...card)
+            }
+return newState;
 
         default:
             return state;
